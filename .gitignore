@@ -13,3 +13,24 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+
+# Python dependencies
+*.pkl
+*.pyc
+
+
+# Images, Audio
+*.jpg
+*.JPG
+*.jpeg
+*.png
+*.bmp
+*.mp4
+*.mp3
+*.avi
+
+
+# vim specific things
+*.un
+*.un~
