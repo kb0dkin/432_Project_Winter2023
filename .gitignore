@@ -34,3 +34,6 @@
 # vim specific things
 *.un
 *.un~
+
+# api
+.env
