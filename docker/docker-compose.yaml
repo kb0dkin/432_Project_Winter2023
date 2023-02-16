@@ -3,7 +3,7 @@ version: "3"
 services:
   database:
     image: postgis/postgis:15-3.3-alpine
-    container_name: base_database
+    container_name: postgis_database
     environment: 
       - POSTGRES_USER=postgis
       - POSTGRES_PASSWORD=432_db
@@ -20,11 +20,13 @@ services:
     container_name: go_scraper
     volumes: 
       - ../scraper:/home/scrape
+    networks:
+      - pgis
 
 
-volumes:
-  postgres:
+#volumes:
+   #postgres:
 
 networks:
   pgis:
-    driver: bridge
+    
