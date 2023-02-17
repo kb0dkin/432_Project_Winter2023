@@ -19,9 +19,16 @@ services:
     image: golang:latest
     container_name: go_scraper
     volumes: 
-      - ../scraper:/home/scrape
+      - ../scrape:/home/scrape
     networks:
       - pgis
+  analysis:
+    build: ./analysis
+    container_name: interactive_analysis
+    networks:
+      - pgis
+    ports:
+      - "9009:9009" # we'll run jupyter on this port
 
 
 #volumes:
