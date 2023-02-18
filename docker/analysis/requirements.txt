@@ -1,0 +1,4 @@
+pandas
+geopandas
+ipympl
+psycopg2-binary

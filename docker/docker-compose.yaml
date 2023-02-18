@@ -15,6 +15,7 @@ services:
       - pgis
     ports:
       - "5432:5432"
+  
   scraper: 
     image: golang:latest
     container_name: go_scraper
@@ -22,6 +23,7 @@ services:
       - ../scrape:/home/scrape
     networks:
       - pgis
+  
   analysis:
     build: ./analysis
     container_name: interactive_analysis
@@ -30,10 +32,22 @@ services:
     ports:
       - "9009:9009" # we'll run jupyter on this port
 
+  user_interface:
+    build: ./UserInterface
+    container_name: user_interface
+    volumes:
+      - flask_resources:/home/UI/flask_resources
+    networks:
+      - front-end
+    ports:
+      - "5000:5000"
 
-#volumes:
+
+volumes:
+  flask_resources:
    #postgres:
 
 networks:
   pgis:
+  front-end:
     
