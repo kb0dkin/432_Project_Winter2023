@@ -31,21 +31,8 @@ func CSVSample(data_set string, query string) {
 	}
 	defer resp.Body.Close()
 
-	// Create a new file with the name results.csv
-	file, err := os.Create("results.csv")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-
-	// Create a new CSV writer that writes to the file
-	writer := csv.NewWriter(file)
-	defer writer.Flush()
-
-	// Create a new CSV reader that reads from the response body
+	//print the response
 	reader := csv.NewReader(resp.Body)
-
-	// Loop through the records and write them to the file
 	for {
 		record, err := reader.Read()
 		if err == io.EOF {
@@ -54,11 +41,10 @@ func CSVSample(data_set string, query string) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		err = writer.Write(record)
-		if err != nil {
-			log.Fatal(err)
-		}
+		fmt.Println(record)
 	}
+
+
 }
 
 // main
