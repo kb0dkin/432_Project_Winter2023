@@ -1,0 +1,64 @@
+steps:
+  # Run tests and save to file
+  - name: golang:1.19
+    entrypoint: /bin/bash
+    args: 
+      - -c
+      - |
+        go install github.com/jstemmer/go-junit-report/v2@latest
+        2>&1 go test -timeout 1m -v ./... | /go/bin/go-junit-report -set-exit-code -iocopy -out ${SHORT_SHA}_test_log.xml
+
+  # Docker Build
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'myapp:latest', '.']
+
+  # Docker Build Postgres
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'myapp-db:latest', '-f', 'Dockerfile', '.']
+
+  # Start Postgres container
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - run
+      - --detach
+      - --name=myapp-db
+      - -p
+      - '5432:5432'
+      - myapp-db:latest
+
+  # Wait for Postgres to be ready
+  - name: 'gcr.io/cloud-builders/postgres'
+    entrypoint: /bin/bash
+    args:
+      - -c
+      - |
+        while ! pg_isready -U $POSTGRES_USER -d $POSTGRES_DB -h localhost -p 5432; do
+          sleep 1
+        done
+
+  # Docker push to Google Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/myapp:latest']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/myapp-db:latest']
+
+  # Deploy to Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['run', 'deploy', 'myapp', 
+           '--image=gcr.io/$PROJECT_ID/myapp:latest', 
+           '--region', 'us-central1', '--platform', 'managed', 
+           '--add-cloudsql-instances', '$alissa-assign-6-2:us-central1:alissa-postgres=tcp:5432', 
+           '--set-env-vars', 'POSTGRES_DB=alissa-postgres,POSTGRES_USER=postgres,POSTGRES_PASSWORD=thatone']
+
+# Save test logs to Google Cloud Storage
+artifacts:
+  objects:
+    location: gs://$PROJECT_ID/
+    paths:
+      - ${SHORT_SHA}_test_log.xml
+
+# Store images in Google Artifact Registry
+images:
+  - gcr.io/$PROJECT_ID/myapp:
+
+
