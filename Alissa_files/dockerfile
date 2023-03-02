@@ -1,0 +1,10 @@
+# Use the official Postgres image
+FROM postgres:latest
+
+# Add custom initialization script
+ADD create_tables.sql /docker-entrypoint-create_tables_db.d/
+
+# Set Postgres environment variables
+ENV POSTGRES_DB=alissa-postgres \
+    POSTGRES_USER=postgres \
+    POSTGRES_PASSWORD=thatone
