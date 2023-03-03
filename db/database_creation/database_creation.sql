@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS ccvi_taxi(
 )
 
 
--- requirement 5-- building permits by neighborhood with unemployment, poverty, income info
+-- requirement 5 -- building permits by neighborhood with unemployment, poverty, income info
 CREATE TABLE IF NOT EXISTS permit_neighborhood(
 	permit_id			int PRIMARY KEY, -- building permit id
 	neighborhood 		varchar(100), -- neighborhood name
