@@ -1,3 +1,9 @@
+-- new enumeration types
+
+-- taxi/rideshare enum
+CREATE TYPE ride_types AS ENUM ('taxi','rideshare')
+
+
 
 -- intake database
 \c default -- connect to the "pg" admin database
@@ -35,6 +41,7 @@ CREATE TABLE IF NOT EXISTS taxi_trips(
 	trip_len			int,	-- trip length in seconds
 	trip_dist			float,	-- not very useful, since this is really based off census tracts...
 	comm_area_start		int,	-- community area number. blank outside chicago
+	lat_long_start		geography(point), --
 	comm_area_end		int		-- community area number. blank outside chicago
 )
 
@@ -69,6 +76,85 @@ CREATE TABLE IF NOT EXISTS health_ind(
 	income				float, -- dollars
 	unemployment		float  -- percent of persons >16yo
 );
+
+
+-- database for transformed datasets
+SELECT 'CREATE DATABASE silver'
+WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'silver')\gexec
+\c silver;
+
+-- requirement 1: covid in zip codes vs taxis
+CREATE TABLE IF NOT EXISTS taxi_covid(
+	ind					SERIAL PRIMARY KEY, -- primary key
+	ride_type			ride_types, -- taxi or rideshare?
+	ride_date			date, -- date of the rides
+	zip_start			int,  -- pick up zip code
+	zip_end				int,  -- destination zip code
+	covid_rate			float, -- weekly covid rate (that's all we've got...)
+	num_rides			int -- number of rides to that zip
+)
+
+-- requirement 2 -- taxis from airports to zip codes vs covid rates
+-- 			I think this is just a subset of above...
+-- for midway
+CREATE TABLE IF NOT EXISTS midway_taxi_covid(
+	ind					SERIAL PRIMARY KEY, -- primary key
+	ride_type			ride_types, -- taxi or rideshare?
+	ride_date			date, -- date of the rides
+	zip					int,  -- destination zip code
+	covid_rate			float, -- weekly covid rate (that's all we've got...)
+	num_rides			int -- number of rides to that zip
+)
+-- for o'hare
+CREATE TABLE IF NOT EXISTS ohare_taxi_covid(
+	ind					SERIAL PRIMARY KEY, -- primary key
+	ride_type			ride_types, -- taxi or rideshare?
+	ride_date			date, -- date of the rides
+	zip					int,  -- destination zip code
+	covid_rate			float, -- weekly covid rate (that's all we've got...)
+	num_rides			int -- number of rides to that zip
+)
+
+
+-- requirement 3 -- taxi trip #s vs covid vulnerability index
+CREATE TABLE IF NOT EXISTS ccvi_taxi(
+	trip_id				varchar(50) PRIMARY KEY, -- trip number
+	taxi_id				varchar(100), -- taxi number; may be NULL if it's ride share
+	ride_type			ride_types, -- taxi or rideshare?
+	comm_area_start		varchar(100),
+	comm_area_end		varchar(100)
+
+)
+
+
+-- requirement 5-- building permits by neighborhood with unemployment, poverty, income info
+CREATE TABLE IF NOT EXISTS permit_neighborhood(
+	permit_id			int PRIMARY KEY, -- building permit id
+	neighborhood 		varchar(100), -- neighborhood name
+	unemployment		float, -- perc over 16yo
+	poverty				float, -- per households
+	income				float
+)
+
+-- req 6 -- building permits by zip code, with health measures
+CREATE TABLE IF NOT EXISTS permit_zip(
+	permit_id			int PRIMARY KEY, -- building permit id
+	zip					int, -- zip code
+	unemployment		float, -- perc over 16yo
+	poverty				float, -- per households
+	income				float
+)
+
+-- taxi counts (start with just date)
+-- 		we'll split it by type so that we can compare those. Seems interesting
+CREATE TABLE IF NOT EXISTS(
+	id					SERIAL PRIMARY KEY, -- primary key
+	date				date, 
+	zip					int,
+	taxi_count			int,
+	rideshare_count		int
+)
+
 
 
 -- database for output data
