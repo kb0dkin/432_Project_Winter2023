@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 	"time"
 
 	"github.com/SebastiaanKlippert/go-soda"
@@ -32,7 +31,7 @@ type Trip []struct {
 
 
 func CSVSample(data_set string, query string) Trip {
-	APP_TOKEN := os.Getenv("cqh5tqp0euzwjliw0si085ncm")
+	APP_TOKEN := "8nxBA5pgg7aPQ4fDbf4wj8BfM"
 	url_format := fmt.Sprintf("https://data.cityofchicago.org/resource/%s", data_set)
 	sodareq := soda.NewGetRequest(url_format, APP_TOKEN)
 	sodareq.Format = "json"
@@ -114,6 +113,7 @@ func main() {
 	// Insert each taxi trip into the 'taxi_trips' table using a prepared statement
 	for _, trip := range trips {
 		fmt.Println(trip.TripID)
+		count := 0
 		if trip.TripID != "" && trip.TripSeconds != "" && trip.TripMiles != "" && trip.PickupCommunityArea != "" && trip.DropoffCommunityArea != "" && trip.TaxiID != "" {
 			_, err = stmt.Exec(			
 				trip.TripID,
@@ -128,6 +128,8 @@ func main() {
 				log.Fatal(err)
 			}
 			fmt.Printf("Inserted trip with ID %s\n", trip.TripID)
+			fmt.Printf("Count %d\n", count)
+			count++
 	}
 }
 
