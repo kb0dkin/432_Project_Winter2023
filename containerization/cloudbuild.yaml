@@ -1,10 +1,12 @@
 steps:
 
-# create the tables as necessary
+# connect to the cloud sql instance
+  - name: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.1.1
+    args: ['./cloud-sql-proxy','msds432-group2:us-central1:gcloud-pg-instance']
+  
+# run psql client and build the databases
   - name: postgres:14
-    args:
-      - curl -o cloud-sql-proxy https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/v2.0.0/cloud-sql-proxy.linux.amd64
-      - ./cloud-sql-proxy msds432-group2:us-central1:gcloud-pg-instance
-      - psql "host=127.0.0.1 port=5432 sslmode=disable user=postgres password=$_PGPASS file=../db/database_creation.sql"
+    args: 
+      - 'psql -h 127.0.0.1 -P 5432 --sslmode=disable --user=postgres --password=$_PGPASS'
 
 # compile the taxi go scraper
