@@ -123,7 +123,6 @@ CREATE TABLE IF NOT EXISTS ccvi_taxi(
 	ride_type			ride_types, -- taxi or rideshare?
 	comm_area_start		varchar(100),
 	comm_area_end		varchar(100)
-
 )
 
 
