@@ -22,6 +22,10 @@ type Trip []struct {
 	TaxiID                  string `json:"taxi_id"`
 	TripSeconds             string `json:"trip_seconds"`
 	TripMiles               string `json:"trip_miles"`
+	PickupCentroidLatitude  string `json:"pickup_centroid_latitude,omitempty"`
+	PickupCentroidLongitude string `json:"pickup_centroid_longitude,omitempty"`
+	DropoffCentroidLatitude  string `json:"dropoff_centroid_latitude,omitempty"`
+	DropoffCentroidLongitude string `json:"dropoff_centroid_longitude,omitempty"`
 	PickupCommunityArea     string `json:"pickup_community_area,omitempty"`
 	DropoffCommunityArea     string `json:"dropoff_community_area,omitempty"`
 }
