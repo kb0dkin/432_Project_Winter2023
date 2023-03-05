@@ -61,8 +61,9 @@ func CSVSample(data_set string) Trip {
 }
 
 
-func connect(connStr string) {
+func connect(connStr string) *sql.DB {
 	cleanup, err:= pgxv4.RegisterDriver("cloudsql-postgres",cloudsqlconn.WithIAMAuthN())
+
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -71,8 +72,7 @@ func connect(connStr string) {
 
 	db, err := sql.Open(
 		"cloudsql-postgres",
-		connStr
-	)
+		connStr)
 
 	return db
 }
@@ -96,9 +96,9 @@ func main() {
     user := os.Getenv("PGUSER")
     password := os.Getenv("PGPASS")
     dbname := "bronze"
-    connStr := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
+    connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
 
-	db = connect(connStr) // connect to the database
+	db := connect(connStr) // connect to the database
 
 	// // Open a new database connection
     // db, err := sql.Open("postgres", connStr)
