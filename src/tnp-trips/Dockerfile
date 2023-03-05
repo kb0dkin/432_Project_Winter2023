@@ -1,6 +1,6 @@
 FROM alpine:latest
 
 RUN mkdir -p /src
-COPY TNP-trips /src/TNP-trips
+COPY tnp-trips /src/tnp-trips
 
-CMD ['/src/TNP-trips']
+CMD ['/src/tnp-trips']
