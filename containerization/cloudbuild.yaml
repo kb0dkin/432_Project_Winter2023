@@ -1,12 +1,43 @@
 steps:
 
-# connect to the cloud sql instance
-  - name: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.1.1
-    args: ['./cloud-sql-proxy','msds432-group2:us-central1:gcloud-pg-instance']
+# create a new folder, copy eveything into the folder
+- name: alpine:latest
+  args:
+    - 'mkdir /usr/dev/src'
+    - 'cp */*go* /usr/dev/src'
+
+# copy cloudsql socket stuff to the 
+
+# start compiling everything
+- name: golang:latest
+  args: 
+    - 'go build /usr/dev/src/covid_19_daily_cases/covid_19_daily_cases.go'
+
+# build the docker container
+- name: gcr.io/cloud-builders/docker
+  args:
+    - 'build -t scraper:covid_19_daily_cases'
+
+# push to the artifact registry
+- name: docker:latest
+  args:
+    - 'push gcr.io/$PROJECT_ID/scraper:covid_19_daily_cases'
+
+# deploy
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['run','deploy','daily_covid_scraper',
+         '--image=gcr.io/$PROJECT_ID/scraper:covid_19_daily_cases',
+         '--region','us-central1','--platform','managed',
+         '--add-cloudsql-instances','$_cloudsql_instance',
+         '--set-env-vars','PGPORT=$_PGPORT,PGUSER=$_PGUSER,PGPASS=$_PGPASS,INSTANCE_UNIX_SOCKET=/cloudsql/$_cloudsql_instance']
+
+# # connect to the cloud sql instance
+  # - name: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.1.1
+    # args: ['./cloud-sql-proxy','msds432-group2:us-central1:gcloud-pg-instance']
   
-# run psql client and build the databases
-  - name: postgres:14
-    args: 
-      - 'psql -h 127.0.0.1 -P 5432 --sslmode=disable --user=postgres --password=$_PGPASS'
+# # run psql client and build the databases
+  # - name: postgres:14
+    # args: 
+      # - 'psql -h 127.0.0.1 -P 5432 --sslmode=disable --user=postgres --password=$_PGPASS'
 
 # compile the taxi go scraper
