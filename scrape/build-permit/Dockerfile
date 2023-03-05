@@ -1,6 +1,7 @@
 FROM alpine:latest
 
 COPY *go* /src/
-RUN ['go','build','/src/']
+WORKDIR /src
+RUN ['go','build']
 
 CMD ['/src/build-permit']
