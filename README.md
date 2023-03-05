@@ -24,7 +24,7 @@ Data Extraction: The Go program extracts data from the Chicago Database and form
 
 Google SQL: The formatted data is then uploaded to Google SQL and stored in our Bronze database.
 
-Data Transformation: The data is then transformed and loaded into the Silver database instance, which is optimized for querying.
+Data Transformation: The data is then transformed and loaded into the Silver database, which is optimized for querying.
 
 Data Visualization: Finally, Looker is used to create visualizations and dashboards for our users to access the data.
 
