@@ -1,7 +1,5 @@
 -- new enumeration types
 
--- taxi/rideshare enum
-CREATE TYPE ride_types AS ENUM ('taxi','rideshare');
 
 
 
@@ -83,6 +81,9 @@ SELECT 'CREATE DATABASE silver'
 WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'silver')\gexec
 \c silver;
 
+-- taxi/rideshare enum
+CREATE TYPE ride_types AS ENUM ('taxi','rideshare');
+
 -- requirement 1: covid in zip codes vs taxis
 CREATE TABLE IF NOT EXISTS taxi_covid(
 	ind					SERIAL PRIMARY KEY, -- primary key
@@ -115,7 +116,6 @@ CREATE TABLE IF NOT EXISTS ohare_taxi_covid(
 	num_rides			int -- number of rides to that zip
 );
 
-
 -- requirement 3 -- taxi trip #s vs covid vulnerability index
 CREATE TABLE IF NOT EXISTS ccvi_taxi(
 	trip_id				varchar(50) PRIMARY KEY, -- trip number
@@ -124,7 +124,6 @@ CREATE TABLE IF NOT EXISTS ccvi_taxi(
 	comm_area_start		varchar(100),
 	comm_area_end		varchar(100)
 );
-
 
 -- requirement 5 -- building permits by neighborhood with unemployment, poverty, income info
 CREATE TABLE IF NOT EXISTS permit_neighborhood(
@@ -146,7 +145,7 @@ CREATE TABLE IF NOT EXISTS permit_zip(
 
 -- taxi counts (start with just date)
 -- 		we'll split it by type so that we can compare those. Seems interesting
-CREATE TABLE IF NOT EXISTS(
+CREATE TABLE IF NOT EXISTS taxi_count(
 	id					SERIAL PRIMARY KEY, -- primary key
 	date				date, 
 	zip					int,
