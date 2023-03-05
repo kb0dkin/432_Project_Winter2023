@@ -1,4 +1,4 @@
-module taxi-trips.go
+module taxi-trips
 
 go 1.18
 

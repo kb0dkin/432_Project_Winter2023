@@ -7,7 +7,7 @@ steps:
     - -c
     - |
       cd ./build-permit
-      go build . -o build-permit
+      go build . 
       cd ..
 
 - name: 'gcr.io/cloud-builders/docker'
@@ -24,7 +24,7 @@ steps:
     - -c
     - |
       cd ./covid-19-daily-cases
-      go build . -o covid-19-daily-cases
+      go build . 
       cd ..
 
 - name: 'gcr.io/cloud-builders/docker'
@@ -41,7 +41,7 @@ steps:
     - -c
     - |
       cd ./covid-19-zip
-      go build . -o covid-19-zip
+      go build . 
       cd ..
 
 - name: 'gcr.io/cloud-builders/docker'
@@ -57,7 +57,7 @@ steps:
     - -c
     - |
       cd ./health-ind
-      go build . -o health-ind
+      go build . 
       cd ..
 
 - name: 'gcr.io/cloud-builders/docker'
@@ -73,7 +73,7 @@ steps:
     - -c
     - |
       cd ./taxi-trips
-      go build . -o taxi-trips
+      go build . 
       cd ..
 
 - name: 'gcr.io/cloud-builders/docker'
@@ -89,7 +89,7 @@ steps:
       - -c
       - | 
         cd ./TNP-trips
-        go build . -o TNP-trips
+        go build . 
         cd ..
 
 - name: 'gcr.io/cloud-builders/docker'
@@ -103,7 +103,7 @@ steps:
 #- name: 'gcr.io/cloud-builders/docker'
   #args: ['build', '-t', 'gcr.io/msds432-group2/postgres-image/postgres', '.']
 #- name: 'gcr.io/cloud-builders/wget'
-  #args: ['-O', '/workspace/cloud-sql-proxy', 'https://dl.google.com/cloudsql/cloud-sql-proxy.linux.amd64']
+  #args: ['
   #dir: '/workspace'
 #- name: 'gcr.io/cloud-builders/docker'
   #args: ['push', 'gcr.io/msds432-group2/postgres-image/postgres']

@@ -1,4 +1,4 @@
-module msds432/scrape
+module health-ind
 
 go 1.19
 
