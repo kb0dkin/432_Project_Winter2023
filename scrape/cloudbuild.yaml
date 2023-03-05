@@ -4,9 +4,11 @@ steps:
 - name: 'golang:latest'
   entrypoint: '/bin/bash'
   args: 
-    - 'cd ./build-permit'
-    - 'go build . -o build-permit'
-    - 'cd ..'
+    - -c
+    - |
+      cd ./build-permit
+      go build . -o build-permit
+      cd ..
 
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'us-central1-docker.pkg.dev/msds432-group2/go-images/build-permit', './build-permit/']
@@ -19,9 +21,11 @@ steps:
 - name: 'golang:latest'
   entrypoint: '/bin/bash'
   args: 
-    - 'cd ./covid-19-daily-cases'
-    - 'go build . -o covid-19-daily-cases'
-    - 'cd ..'
+    - -c
+    - |
+      cd ./covid-19-daily-cases
+      go build . -o covid-19-daily-cases
+      cd ..
 
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'us-central1-docker.pkg.dev/msds432-group2/go-images/covid-19-daily-cases', './covid-19-daily-cases']
@@ -34,9 +38,11 @@ steps:
 - name: 'golang:latest'
   entrypoint: '/bin/bash'
   args: 
-    - 'cd ./covid-19-zip'
-    - 'go build . -o covid-19-zip'
-    - 'cd ..'
+    - -c
+    - |
+      cd ./covid-19-zip
+      go build . -o covid-19-zip
+      cd ..
 
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'us-central1-docker.pkg.dev/msds432-group2/go-images/covid-19-zip', './covid-19-zip']
@@ -48,9 +54,11 @@ steps:
 - name: 'golang:latest'
   entrypoint: '/bin/bash'
   args: 
-    - 'cd ./health-ind'
-    - 'go build . -o health-ind'
-    - 'cd ..'
+    - -c
+    - |
+      cd ./health-ind
+      go build . -o health-ind
+      cd ..
 
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'us-central1-docker.pkg.dev/msds432-group2/go-images/health-ind', './health-ind']
@@ -62,9 +70,11 @@ steps:
 - name: 'golang:latest'
   entrypoint: '/bin/bash'
   args: 
-    - 'cd ./taxi-trips'
-    - 'go build . -o taxi-trips'
-    - 'cd ..'
+    - -c
+    - |
+      cd ./taxi-trips
+      go build . -o taxi-trips
+      cd ..
 
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'us-central1-docker.pkg.dev/msds432-group2/go-images/taxi-trips', './taxi-trips']
@@ -75,10 +85,12 @@ steps:
 
 - name: 'golang:latest'
   entrypoint: '/bin/bash'
-  args: 
-    - 'cd ./TNP-trips'
-    - 'go build . -o TNP-trips'
-    - 'cd ..'
+  args:
+      - -c
+      - | 
+        cd ./TNP-trips
+        go build . -o TNP-trips
+        cd ..
 
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'us-central1-docker.pkg.dev/msds432-group2/go-images/TNP-trips', './TNP-trips']

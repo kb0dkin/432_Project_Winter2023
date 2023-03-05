@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-RUN 'mkdir /src'
+RUN mkdir -p /src
 COPY build-permit /src/build-permit
 
 CMD ['/src/build-permit']
