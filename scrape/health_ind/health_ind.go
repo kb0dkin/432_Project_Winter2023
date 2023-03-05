@@ -70,28 +70,36 @@ func CSVSample(data_set string) Trip {
 // main
 
 func main() {
-	// Get today's date
-	//02/01/2023 12:00:00 AM
-	//https://data.cityofchicago.org/api/id/wrvz-psew.json?$query=select *, :id order by `trip_start_timestamp` asc limit 100
-	//Get everything after 01/01/2022
+	
 	
 	// Get a sample of taxi trips from the Socrata API from today
 	trips := CSVSample("iqnk-2tcu")
 
-	host := "localhost"
-    port := 5432
-    user := "postgres"
-    password := "password"
-    dbname := "mydatabase"
-    connStr := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
+	//host := "34.134.248.227"
+    //port := 5432
+    //user := "postgres"
+    //password := "432"
+    //dbname := "bronze"
+    //connStr := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
+
+
+	dsn := "host=34.134.248.227 user=postgres password=432 dbname=bronze port=5432 sslmode=disable"
+
 
 	// Open a new database connection
-    db, err := sql.Open("postgres", connStr)
+	db, err := sql.Open("postgres", dsn)
+    //db, err := sql.Open("postgres", connStr)
     if err != nil {
         panic(err)
     }
     defer db.Close()
-
+	//Ping the database to make sure the connection is still alive
+	err = db.Ping()
+	if err != nil {
+		log.Fatal(err)
+	}
+	//Print a success message
+	fmt.Println("Successfully connected to database!")
 
 
 

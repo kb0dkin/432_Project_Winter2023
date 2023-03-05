@@ -80,15 +80,10 @@ func main() {
 	// Get a sample of taxi trips from the Socrata API from today
 	trips := CSVSample("ydr8-5enu")
 
-	host := "localhost"
-    port := 5432
-    user := "postgres"
-    password := "password"
-    dbname := "mydatabase"
-    connStr := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
+	dsn := "host=34.134.248.227 user=postgres password=432 dbname=bronze port=5432 sslmode=disable"
 
 	// Open a new database connection
-    db, err := sql.Open("postgres", connStr)
+    db, err := sql.Open("postgres", dsn)
     if err != nil {
         panic(err)
     }
