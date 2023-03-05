@@ -1,4 +1,4 @@
-module TNP-trips
+module tnp-trips
 
 go 1.18
 

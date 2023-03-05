@@ -88,15 +88,15 @@ steps:
   args:
       - -c
       - | 
-        cd ./TNP-trips
+        cd ./tnp-trips
         go build . 
         cd ..
 
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/msds432-group2/go-images/TNP-trips:latest','-f-','./TNP-trips']
+  args: ['build', '-t', 'gcr.io/msds432-group2/go-images/tnp-trips:latest','-f-','./tnp-trips']
 
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/msds432-group2/go-images/TNP-trips:latest']
+  args: ['push', 'gcr.io/msds432-group2/go-images/tnp-trips:latest']
 
 
 ## Docker Build and Push Postgres
@@ -117,6 +117,6 @@ steps:
          '--image', 'gcr.io/msds432-group2/covid-19-zip', '--region', 'us-central1',
          '--image', 'gcr.io/msds432-group2/health-ind', '--region', 'us-central1',
          '--image', 'gcr.io/msds432-group2/taxi-trips', '--region', 'us-central1',
-         '--image', 'gcr.io/msds432-group2/TNP-trips', '--region', 'us-central1',
+         '--image', 'gcr.io/msds432-group2/tnp-trips', '--region', 'us-central1',
          '--add-cloudsql-instances', 'msds432-group2:us-central1:postgres-12-instance=tcp:5432', 
          '--set-env-vars', 'PGDB=bronze,PGUSER=postgres,PGPASS=432']
