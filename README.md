@@ -22,7 +22,7 @@ This repository contains the source code and configuration files required to int
 
 Data Extraction: The Go program extracts data from the Chicago Database and formats it to match the schema of our Google SQL database.
 
-Google SQL: The formatted data is then uploaded to Google SQL and stored in our Bronze database instance.
+Google SQL: The formatted data is then uploaded to Google SQL and stored in our Bronze database.
 
 Data Transformation: The data is then transformed and loaded into the Silver database instance, which is optimized for querying.
 
