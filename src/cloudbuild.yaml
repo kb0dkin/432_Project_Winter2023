@@ -93,7 +93,7 @@ steps:
         cd ..
 
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/msds432-group2/go-images/tnp-trips:latest','-f-','./tnp-trips']
+  args: ['build', '-t', 'gcr.io/msds432-group2/go-images/tnp-trips:latest','./tnp-trips']
 
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/msds432-group2/go-images/tnp-trips:latest']
