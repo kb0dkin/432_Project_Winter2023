@@ -22,12 +22,12 @@ type Trip []struct {
 	TaxiID                  string `json:"taxi_id"`
 	TripSeconds             string `json:"trip_seconds"`
 	TripMiles               string `json:"trip_miles"`
-	PickupCentroidLatitude  string `json:"pickup_centroid_latitude,omitempty"`
-	PickupCentroidLongitude string `json:"pickup_centroid_longitude,omitempty"`
-	DropoffCentroidLatitude  string `json:"dropoff_centroid_latitude,omitempty"`
-	DropoffCentroidLongitude string `json:"dropoff_centroid_longitude,omitempty"`
-	PickupCommunityArea     string `json:"pickup_community_area,omitempty"`
-	DropoffCommunityArea     string `json:"dropoff_community_area,omitempty"`
+	PickupCentroidLatitude  string `json:"pickup_centroid_latitude"`
+	PickupCentroidLongitude string `json:"pickup_centroid_longitude"`
+	DropoffCentroidLatitude  string `json:"dropoff_centroid_latitude"`
+	DropoffCentroidLongitude string `json:"dropoff_centroid_longitude"`
+	PickupCommunityArea     string `json:"pickup_community_area"`
+	DropoffCommunityArea     string `json:"dropoff_community_area"`
 }
 
 
@@ -98,19 +98,10 @@ func main() {
     }
     defer db.Close()
 
-	// Prepare a SQL statement to insert a new row into the 'taxi_trips' table
-	stmt, err := db.Prepare(`INSERT INTO taxi_trips (    
-    trip_id,
-    taxi_id,
-    trip_seconds,
-    trip_miles,
-    community_area_pickup,
-	dropoff_community_area
-	) VALUES ($1, $2, $3, $4, $5, $6)
-	ON CONFLICT (trip_id) DO NOTHING`)
+	stmt, err := db.Prepare(`INSERT INTO taxi_trips ( trip_id, taxi_id, trip_seconds, trip_miles, pickup_centroid_latitude, pickup_centroid_longitude, dropoff_centroid_latitude, dropoff_centroid_longitude, pickup_community_area, dropoff_community_area ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) ON CONFLICT (trip_id) DO NOTHING`)
 	if err != nil {
-    log.Fatal(err)
-		}
+	log.Fatal(err)
+	}
 	defer stmt.Close()
 
 
@@ -124,6 +115,10 @@ func main() {
 				trip.TaxiID,
 				trip.TripSeconds,
 				trip.TripMiles,
+				trip.PickupCentroidLatitude,
+				trip.PickupCentroidLongitude,
+				trip.DropoffCentroidLatitude,
+				trip.DropoffCentroidLongitude,
 				trip.PickupCommunityArea,
 				trip.DropoffCommunityArea,
 				

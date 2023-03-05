@@ -19,27 +19,25 @@ import (
 
 type Trip []struct {
 	TripID                  string `json:"trip_id"`
-	TaxiID                  string `json:"taxi_id"`
 	TripSeconds             string `json:"trip_seconds"`
 	TripMiles               string `json:"trip_miles"`
-	PickupCentroidLatitude  string `json:"pickup_centroid_latitude,omitempty"`
-	PickupCentroidLongitude string `json:"pickup_centroid_longitude,omitempty"`
-	DropoffCentroidLatitude  string `json:"dropoff_centroid_latitude,omitempty"`
-	DropoffCentroidLongitude string `json:"dropoff_centroid_longitude,omitempty"`
-	PickupCommunityArea     string `json:"pickup_community_area,omitempty"`
-	DropoffCommunityArea     string `json:"dropoff_community_area,omitempty"`
+	PickupCommunityArea     string `json:"pickup_community_area"`
+	DropoffCommunityArea    string `json:"dropoff_community_area"`
+	PickupCentroidLatitude  string `json:"pickup_centroid_latitude"`
+	PickupCentroidLongitude string `json:"pickup_centroid_longitude"`
+	DropoffCentroidLatitude  string `json:"dropoff_centroid_latitude"`
+	DropoffCentroidLongitude string `json:"dropoff_centroid_longitude"`
 }
 
 
 
 
 
-func CSVSample(data_set string, query string) Trip {
+func CSVSample(data_set string) Trip {
 	APP_TOKEN := "8nxBA5pgg7aPQ4fDbf4wj8BfM"
 	url_format := fmt.Sprintf("https://data.cityofchicago.org/resource/%s", data_set)
 	sodareq := soda.NewGetRequest(url_format, APP_TOKEN)
-	sodareq.Format = "json"
-	sodareq.Query.Where = query
+	sodareq.Format = "json"	
 	sodareq.Query.Limit = 1000
 
 
@@ -76,13 +74,10 @@ func main() {
 	// Get today's date
 	//02/01/2023 12:00:00 AM
 	//https://data.cityofchicago.org/api/id/wrvz-psew.json?$query=select *, :id order by `trip_start_timestamp` asc limit 100
-	//Get everything after 2023-01-01
+	//Get everything after 01/01/2022
 	
-	where_statement := "trip_start_timestamp > '2022-01-01T00:00:00.000'"
-
-
 	// Get a sample of taxi trips from the Socrata API from today
-	trips := CSVSample("wrvz-psew", where_statement)
+	trips := CSVSample("m6dm-c72p")
 
 	host := "localhost"
     port := 5432
@@ -98,19 +93,10 @@ func main() {
     }
     defer db.Close()
 
-	// Prepare a SQL statement to insert a new row into the 'taxi_trips' table
-	stmt, err := db.Prepare(`INSERT INTO taxi_trips (    
-    trip_id,
-    taxi_id,
-    trip_seconds,
-    trip_miles,
-    community_area_pickup,
-	dropoff_community_area
-	) VALUES ($1, $2, $3, $4, $5, $6)
-	ON CONFLICT (trip_id) DO NOTHING`)
+	stmt, err := db.Prepare(`INSERT INTO TNP_trips (trip_id, trip_seconds, trip_miles, pickup_community_area, dropoff_community_area, pickup_centroid_latitude, pickup_centroid_longitude, dropoff_centroid_latitude, dropoff_centroid_longitude) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`)
 	if err != nil {
-    log.Fatal(err)
-		}
+	log.Fatal(err)
+	}
 	defer stmt.Close()
 
 
@@ -118,14 +104,17 @@ func main() {
 	for _, trip := range trips {
 		fmt.Println(trip.TripID)
 		count := 0
-		if trip.TripID != "" && trip.TripSeconds != "" && trip.TripMiles != "" && trip.PickupCommunityArea != "" && trip.DropoffCommunityArea != "" && trip.TaxiID != "" {
-			_, err = stmt.Exec(			
+		if trip.TripID != "" && trip.TripSeconds != "" && trip.TripMiles != "" && trip.PickupCommunityArea != "" && trip.DropoffCommunityArea != "" && trip.PickupCentroidLatitude != "" && trip.PickupCentroidLongitude != "" && trip.DropoffCentroidLatitude != "" && trip.DropoffCentroidLongitude != ""{
+			_, err = stmt.Exec(
 				trip.TripID,
-				trip.TaxiID,
 				trip.TripSeconds,
 				trip.TripMiles,
 				trip.PickupCommunityArea,
 				trip.DropoffCommunityArea,
+				trip.PickupCentroidLatitude,
+				trip.PickupCentroidLongitude,
+				trip.DropoffCentroidLatitude,
+				trip.DropoffCentroidLongitude,
 				
 			)
 			if err != nil {
