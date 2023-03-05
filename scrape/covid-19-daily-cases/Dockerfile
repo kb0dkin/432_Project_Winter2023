@@ -1,9 +1,6 @@
 FROM alpine:latest
 
-RUN ['apt-get','update','&&','apt-get','install','golang','-y']
-
-COPY *go* /src/
-WORKDIR /src
-RUN ['go','build']
+RUN 'mkdir /src'
+COPY covid-19-daily-cases /src/covid-19-daily-cases
 
 CMD ['/src/covid-19-daily-cases']

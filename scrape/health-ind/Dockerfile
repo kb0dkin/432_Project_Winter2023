@@ -1,9 +1,6 @@
 FROM alpine:latest
 
-RUN ['apt-get','update','&&','apt-get','install','golang','-y']
+RUN 'mkdir /src'
+COPY health-ind /src/health-ind
 
-COPY *go* /src/
-WORKDIR /src
-RUN ['go','build']
-
-CMD ['/src/covid-19-daily-cases']
+CMD ['/src/health-ind']

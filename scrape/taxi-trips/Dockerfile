@@ -1,9 +1,6 @@
 FROM alpine:latest
 
-RUN ['apt-get','update','&&','apt-get','install','golang','-y']
-
-COPY *go* /src/
-WORKDIR /src
-RUN ['go','build']
+RUN 'mkdir /src'
+COPY taxi-trips /src/taxi-trips
 
 CMD ['/src/taxi-trips']

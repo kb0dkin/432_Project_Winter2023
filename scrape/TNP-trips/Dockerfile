@@ -1,9 +1,6 @@
 FROM alpine:latest
 
-RUN ['apt-get','update','&&','apt-get','install','golang','-y']
-
-COPY *go* /src/
-WORKDIR /src
-RUN ['go','build']
+RUN 'mkdir /src'
+COPY TNP-trips /src/TNP-trips
 
 CMD ['/src/TNP-trips']
