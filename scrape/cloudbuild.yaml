@@ -50,11 +50,11 @@ steps:
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
   args: ['run', 'deploy', 'cloud-run-service', 
-         '--image, 'gcr.io/MSDS432-group2/build-permit', '--region', 'us-central1',
-         '--image, 'gcr.io/MSDS432-group2/covid-19-daily-cases', '--region', 'us-central1'
-         '--image, 'gcr.io/MSDS432-group2/covid-19-zip', '--region', 'us-central1'
-         '--image, 'gcr.io/MSDS432-group2/health-ind', '--region', 'us-central1'
-         '--image, 'gcr.io/MSDS432-group2/taxi-trips', '--region', 'us-central1' 
-         '--image, 'gcr.io/MSDS432-group2/TNP-trips', '--region', 'us-central1'
+         '--image', 'gcr.io/MSDS432-group2/build-permit', '--region', 'us-central1',
+         '--image', 'gcr.io/MSDS432-group2/covid-19-daily-cases', '--region', 'us-central1',
+         '--image', 'gcr.io/MSDS432-group2/covid-19-zip', '--region', 'us-central1',
+         '--image', 'gcr.io/MSDS432-group2/health-ind', '--region', 'us-central1',
+         '--image', 'gcr.io/MSDS432-group2/taxi-trips', '--region', 'us-central1',
+         '--image', 'gcr.io/MSDS432-group2/TNP-trips', '--region', 'us-central1',
          '--add-cloudsql-instances', 'MSDS432-group2:us-central1:postgres-12-instance=tcp:5432', 
          '--set-env-vars', 'PGDB=bronze,PGUSER=postgres,PGPASS=432']
