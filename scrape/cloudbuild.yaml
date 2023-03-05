@@ -1,0 +1,60 @@
+steps:
+# Docker Build and Push all Golang images:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'us-central1-docker.pkg.dev/MSDS432-group2/go-images/build-permit', './build-permit/']
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us-central1-docker.pkg.dev/MSDS432-group2/go-images/build-permit', './build-permit/']
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'us-central1-docker.pkg.dev/MSDS432-group2/go-images/covid-19-daily-cases', './covid-19-daily-cases']
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us-central1-docker.pkg.dev/MSDS432-group2/go-images/covid-19-daily-cases', './covid-19-daily-cases']
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'us-central1-docker.pkg.dev/MSDS432-group2/go-images/covid-19-zip', './covid-19-zip']
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us-central1-docker.pkg.dev/MSDS432-group2/go-images/covid-19-zip', './covid-19-zip']
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'us-central1-docker.pkg.dev/MSDS432-group2/go-images/health-ind', './health-ind']
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us-central1-docker.pkg.dev/MSDS432-group2/go-images/health-ind', './health-ind']
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'us-central1-docker.pkg.dev/MSDS432-group2/go-images/taxi-trips', './taxi-trips']
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us-central1-docker.pkg.dev/MSDS432-group2/go-images/taxi-trips', './taxi-trips']
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'us-central1-docker.pkg.dev/MSDS432-group2/go-images/TNP-trips', './TNP-trips']
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us-central1-docker.pkg.dev/MSDS432-group2/go-images/TNP-trips', './TNP-trips']
+
+
+## Docker Build and Push Postgres
+#- name: 'gcr.io/cloud-builders/docker'
+  #args: ['build', '-t', 'gcr.io/MSDS432-group2/postgres-image/postgres', '.']
+#- name: 'gcr.io/cloud-builders/wget'
+  #args: ['-O', '/workspace/cloud-sql-proxy', 'https://dl.google.com/cloudsql/cloud-sql-proxy.linux.amd64']
+  #dir: '/workspace'
+#- name: 'gcr.io/cloud-builders/docker'
+  #args: ['push', 'gcr.io/MSDS432-group2/postgres-image/postgres']
+
+# Deploy containers to Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: ['run', 'deploy', 'cloud-run-service', 
+         '--image, 'gcr.io/MSDS432-group2/build-permit', '--region', 'us-central1',
+         '--image, 'gcr.io/MSDS432-group2/covid-19-daily-cases', '--region', 'us-central1'
+         '--image, 'gcr.io/MSDS432-group2/covid-19-zip', '--region', 'us-central1'
+         '--image, 'gcr.io/MSDS432-group2/health-ind', '--region', 'us-central1'
+         '--image, 'gcr.io/MSDS432-group2/taxi-trips', '--region', 'us-central1' 
+         '--image, 'gcr.io/MSDS432-group2/TNP-trips', '--region', 'us-central1'
+         '--add-cloudsql-instances', 'MSDS432-group2:us-central1:postgres-12-instance=tcp:5432', 
+         '--set-env-vars', 'PGDB=bronze,PGUSER=postgres,PGPASS=432']
