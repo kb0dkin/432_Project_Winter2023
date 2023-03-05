@@ -1,12 +1,12 @@
 -- new enumeration types
 
 -- taxi/rideshare enum
-CREATE TYPE ride_types AS ENUM ('taxi','rideshare')
+CREATE TYPE ride_types AS ENUM ('taxi','rideshare');
 
 
 
 -- intake database
-\c default -- connect to the "pg" admin database
+\c postgres; -- connect to the "pg" admin database
 SELECT 'CREATE DATABASE bronze'
 WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'bronze')\gexec
 -- connect
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS taxi_trips(
 	comm_area_start		int,	-- community area number. blank outside chicago
 	lat_long_start		geography(point), --
 	comm_area_end		int		-- community area number. blank outside chicago
-)
+);
 
 
 -- TNP_trips	:	list of rideshare trips, with start and end points
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS TNP_trips(
 	trip_dist			float,	-- not very useful, since this is really based off census tracts...
 	comm_area_start		int,	-- community area number. blank outside chicago
 	comm_area_end		int		-- community area number. blank outside chicago
-)
+);
 
 -- build_permit	:	list of building permits
 CREATE TABLE IF NOT EXISTS  build_permit(
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS  build_permit(
 	comm_area			int,  -- community area number
 	ward				int,  -- I would argue this is more important that community area
 	location			geography(POINT) -- point in WGS84
-)
+);
 
 
 -- health_ind :	table of health and other community indicators
@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS taxi_covid(
 	zip_end				int,  -- destination zip code
 	covid_rate			float, -- weekly covid rate (that's all we've got...)
 	num_rides			int -- number of rides to that zip
-)
+);
 
 -- requirement 2 -- taxis from airports to zip codes vs covid rates
 -- 			I think this is just a subset of above...
@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS midway_taxi_covid(
 	zip					int,  -- destination zip code
 	covid_rate			float, -- weekly covid rate (that's all we've got...)
 	num_rides			int -- number of rides to that zip
-)
+);
 -- for o'hare
 CREATE TABLE IF NOT EXISTS ohare_taxi_covid(
 	ind					SERIAL PRIMARY KEY, -- primary key
@@ -113,7 +113,7 @@ CREATE TABLE IF NOT EXISTS ohare_taxi_covid(
 	zip					int,  -- destination zip code
 	covid_rate			float, -- weekly covid rate (that's all we've got...)
 	num_rides			int -- number of rides to that zip
-)
+);
 
 
 -- requirement 3 -- taxi trip #s vs covid vulnerability index
@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS ccvi_taxi(
 	ride_type			ride_types, -- taxi or rideshare?
 	comm_area_start		varchar(100),
 	comm_area_end		varchar(100)
-)
+);
 
 
 -- requirement 5 -- building permits by neighborhood with unemployment, poverty, income info
@@ -133,7 +133,7 @@ CREATE TABLE IF NOT EXISTS permit_neighborhood(
 	unemployment		float, -- perc over 16yo
 	poverty				float, -- per households
 	income				float
-)
+);
 
 -- req 6 -- building permits by zip code, with health measures
 CREATE TABLE IF NOT EXISTS permit_zip(
@@ -142,7 +142,7 @@ CREATE TABLE IF NOT EXISTS permit_zip(
 	unemployment		float, -- perc over 16yo
 	poverty				float, -- per households
 	income				float
-)
+);
 
 -- taxi counts (start with just date)
 -- 		we'll split it by type so that we can compare those. Seems interesting
@@ -152,12 +152,11 @@ CREATE TABLE IF NOT EXISTS(
 	zip					int,
 	taxi_count			int,
 	rideshare_count		int
-)
+);
 
 
 
 -- database for output data
-\c default -- connect to the "pg" admin database
 SELECT 'CREATE DATABASE gold'
 WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'gold')\gexec
 
