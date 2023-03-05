@@ -11,10 +11,10 @@ steps:
       cd ..
 
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-central1-docker.pkg.dev/msds432-group2/go-images/build-permit', '-f','./build-permit/Dockerfile']
+  args: ['build', '-t', 'build-permit:latest','./build-permit']
 
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'us-central1-docker.pkg.dev/msds432-group2/go-images/build-permit']
+  args: ['push', 'gcr.io/msds432-group2/go-images/build-permit:latest']
 
 
 
@@ -28,10 +28,10 @@ steps:
       cd ..
 
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-central1-docker.pkg.dev/msds432-group2/go-images/covid-19-daily-cases', '-f', './covid-19-daily-cases/Dockerfile']
+  args: ['build', '-t', 'covid-19-daily-cases:latest','./covid-19-daily-cases']
 
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'us-central1-docker.pkg.dev/msds432-group2/go-images/covid-19-daily-cases']
+  args: ['push', 'gcr.io/msds432-group2/go-images/covid-19-daily-cases:latest']
 
 
 
@@ -45,10 +45,10 @@ steps:
       cd ..
 
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-central1-docker.pkg.dev/msds432-group2/go-images/covid-19-zip','-f','./covid-19-zip/Dockerfile']
+  args: ['build', '-t', 'covid-19-zip:latest','./covid-19-zip']
 
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'us-central1-docker.pkg.dev/msds432-group2/go-images/covid-19-zip']
+  args: ['push', 'gcr.io/msds432-group2/go-images/covid-19-zip:latest']
 
 
 - name: 'golang:latest'
@@ -61,10 +61,10 @@ steps:
       cd ..
 
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-central1-docker.pkg.dev/msds432-group2/go-images/health-ind','-f','./health-ind/Dockerfile']
+  args: ['build', '-t', 'health-ind:latest','./health-ind']
 
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'us-central1-docker.pkg.dev/msds432-group2/go-images/health-ind']
+  args: ['push', 'gcr.io/msds432-group2/go-images/health-ind:latest']
 
 
 - name: 'golang:latest'
@@ -77,10 +77,10 @@ steps:
       cd ..
 
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-central1-docker.pkg.dev/msds432-group2/go-images/taxi-trips','-f','./taxi-trips']
+  args: ['build', '-t', 'taxi-trips:latest','./taxi-trips']
 
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'us-central1-docker.pkg.dev/msds432-group2/go-images/taxi-trips']
+  args: ['push', 'gcr.io/msds432-group2/go-images/taxi-trips:latest']
 
 
 - name: 'golang:latest'
@@ -93,10 +93,10 @@ steps:
         cd ..
 
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-central1-docker.pkg.dev/msds432-group2/go-images/TNP-trips','-f-','./TNP-trips']
+  args: ['build', '-t', 'TNP-trips:latest','-f-','./TNP-trips']
 
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'us-central1-docker.pkg.dev/msds432-group2/go-images/TNP-trips']
+  args: ['push', 'gcr.io/msds432-group2/go-images/TNP-trips:latest']
 
 
 ## Docker Build and Push Postgres
