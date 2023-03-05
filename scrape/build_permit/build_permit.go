@@ -5,8 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
+	"cloud.google.com/go/cloudsqlconn"
+	"cloud.google.com/go/cloudsqlconn/postgres/pgxv4"
 	"github.com/SebastiaanKlippert/go-soda"
 	_ "github.com/lib/pq"
 )
@@ -59,17 +62,26 @@ func CSVSample(data_set string) Trip {
 		log.Fatal(err)
 	}
 
-
-
-
-
-
 	return trips
-
 
 }
 
-// main
+func connect(connStr string) *sql.DB {
+	cleanup, err:= pgxv4.RegisterDriver("cloudsql-postgres",cloudsqlconn.WithIAMAuthN())
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer cleanup()
+
+	db, err := sql.Open(
+		"cloudsql-postgres",
+		connStr)
+
+	return db
+}
+
 
 func main() {
 	// Get today's date
@@ -80,14 +92,14 @@ func main() {
 	// Get a sample of taxi trips from the Socrata API from today
 	trips := CSVSample("ydr8-5enu")
 
-	dsn := "host=34.134.248.227 user=postgres password=432 dbname=bronze port=5432 sslmode=disable"
+	host := os.Getenv("PGHOST")
+    port := os.Getenv("PGPORT")
+    user := os.Getenv("PGUSER")
+    password := os.Getenv("PGPASS")
+    dbname := "bronze"
+    connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
 
-	// Open a new database connection
-    db, err := sql.Open("postgres", dsn)
-    if err != nil {
-        panic(err)
-    }
-    defer db.Close()
+	db := connect(connStr)
 
 	stmt, err := db.Prepare(`INSERT INTO build_permit (id, permit_, application_start_date, issue_date, community_area, ward, latitude, longitude) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) ON CONFLICT (id) DO NOTHING`)
 	if err != nil {

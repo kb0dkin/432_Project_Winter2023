@@ -5,13 +5,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"time"
 	"os"
+	"time"
 
-	"github.com/SebastiaanKlippert/go-soda"
-	_ "github.com/lib/pq"
 	"cloud.google.com/go/cloudsqlconn"
 	"cloud.google.com/go/cloudsqlconn/postgres/pgxv4"
+	"github.com/SebastiaanKlippert/go-soda"
+	_ "github.com/lib/pq"
 )
 
 //https://data.cityofchicago.org/resource/wrvz-psew.json?$where=trip_miles > 0.1
@@ -78,10 +78,6 @@ func connect(connStr string) *sql.DB {
 }
 
 
-
-
-
-// main
 func main() {
 	// Get today's date
 	//02/01/2023 12:00:00 AM
@@ -100,12 +96,6 @@ func main() {
 
 	db := connect(connStr) // connect to the database
 
-	// // Open a new database connection
-    // db, err := sql.Open("postgres", connStr)
-    // if err != nil {
-        // panic(err)
-    // }
-    // defer db.Close()
 
 	stmt, err := db.Prepare(`INSERT INTO covid_19_daily_cases (lab_report_date, cases_total, deaths_total, hospitalizations_total) VALUES ($1, $2, $3, $4) ON CONFLICT (lab_report_date) DO UPDATE SET cases_total = $2, deaths_total = $3, hospitalizations_total = $4;`)
 	if err != nil {

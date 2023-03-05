@@ -5,8 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
+	"cloud.google.com/go/cloudsqlconn"
+	"cloud.google.com/go/cloudsqlconn/postgres/pgxv4"
 	"github.com/SebastiaanKlippert/go-soda"
 	_ "github.com/lib/pq"
 )
@@ -58,17 +61,26 @@ func CSVSample(data_set string) Trip {
 		log.Fatal(err)
 	}
 
-
-
-
-
-
 	return trips
 
 
 }
 
-// main
+func connect(connStr string) *sql.DB {
+	cleanup, err:= pgxv4.RegisterDriver("cloudsql-postgres",cloudsqlconn.WithIAMAuthN())
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer cleanup()
+
+	db, err := sql.Open(
+		"cloudsql-postgres",
+		connStr)
+
+	return db
+}
 
 func main() {
 	// Get today's date
@@ -79,19 +91,14 @@ func main() {
 	// Get a sample of taxi trips from the Socrata API from today
 	trips := CSVSample("m6dm-c72p")
 
-	host := "localhost"
-    port := 5432
-    user := "postgres"
-    password := "password"
-    dbname := "mydatabase"
-    connStr := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
+	host := os.Getenv("PGHOST")
+    port := os.Getenv("PGPORT")
+    user := os.Getenv("PGUSER")
+    password := os.Getenv("PGPASS")
+    dbname := "bronze"
+    connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
 
-	// Open a new database connection
-    db, err := sql.Open("postgres", connStr)
-    if err != nil {
-        panic(err)
-    }
-    defer db.Close()
+	db := connect(connStr) // connect to the database
 
 	stmt, err := db.Prepare(`INSERT INTO TNP_trips (trip_id, trip_seconds, trip_miles, pickup_community_area, dropoff_community_area, pickup_centroid_latitude, pickup_centroid_longitude, dropoff_centroid_latitude, dropoff_centroid_longitude) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`)
 	if err != nil {
