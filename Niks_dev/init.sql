@@ -56,3 +56,13 @@ CREATE TABLE IF NOT EXISTS  build_permit(
 	latitude			float, -- latitude of the building
 	longitude			float -- longitude of the building
 );
+
+-- health_ind :	table of health and other community indicators
+CREATE TABLE IF NOT EXISTS health_ind(
+	community_area			int PRIMARY KEY, -- this doesn't match the other info!
+	community_area_name		varchar(100), -- community area name
+	below_poverty_level			float, -- percent of households in below poverty level
+	no_high_school_diploma			float, -- percent persons >25yo
+	per_capita_income				float, -- dollars
+	unemployment		float  -- percent of persons >16yo
+);
