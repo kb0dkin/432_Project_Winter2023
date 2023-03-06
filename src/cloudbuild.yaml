@@ -112,11 +112,12 @@ steps:
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
   args: ['run', 'deploy', 'cloud-run-service', 
-         '--image', 'gcr.io/msds432-group2/build-permit', '--region', 'us-central1',
-         '--image', 'gcr.io/msds432-group2/covid-19-daily-cases', '--region', 'us-central1',
-         '--image', 'gcr.io/msds432-group2/covid-19-zip', '--region', 'us-central1',
-         '--image', 'gcr.io/msds432-group2/health-ind', '--region', 'us-central1',
-         '--image', 'gcr.io/msds432-group2/taxi-trips', '--region', 'us-central1',
-         '--image', 'gcr.io/msds432-group2/tnp-trips', '--region', 'us-central1',
-         '--add-cloudsql-instances', 'msds432-group2:us-central1:postgres-12-instance=tcp:5432', 
+         '--image', 'gcr.io/msds432-group2/go-images/build-permit', '--region', 'us-central1',
+         '--image', 'gcr.io/msds432-group2/go-images/covid-19-daily-cases', '--region', 'us-central1',
+         '--image', 'gcr.io/msds432-group2/go-images/covid-19-zip', '--region', 'us-central1',
+         '--image', 'gcr.io/msds432-group2/go-images/health-ind', '--region', 'us-central1',
+         '--image', 'gcr.io/msds432-group2/go-images/taxi-trips', '--region', 'us-central1',
+         '--image', 'gcr.io/msds432-group2/go-images/tnp-trips', '--region', 'us-central1',
+         '--add-cloudsql-instances', 'msds432-group2:us-central1:postgres-12-instance', 
+         '--allow-unauthenticated',
          '--set-env-vars', 'PGDB=bronze,PGUSER=postgres,PGPASS=432']
