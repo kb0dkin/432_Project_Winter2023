@@ -61,6 +61,7 @@ CREATE TABLE IF NOT EXISTS TNP_trips(
 CREATE TABLE IF NOT EXISTS  build_permit(
     id                          int PRIMARY KEY, -- building permit id
     permit_                     int,  -- number assigned at beginning of application process
+    permit_type                 varchar(35), -- type of permit
     application_start_date      date, -- start of application date
     issue_date                  date, -- date it was issued
     community_area              int,  -- community area number

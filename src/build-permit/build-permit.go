@@ -24,6 +24,7 @@ import (
 type Trip []struct {
 	ID string `json:"id"`
 	Permit string `json:"permit_"`
+	PermitType string `json:"permit_type"`
 	ApplicationStartDate string `json:"application_start_date"`
 	IssueDate string `json:"issue_date"`
 	CommunityArea string `json:"community_area"`
@@ -101,7 +102,7 @@ func main() {
 
 	db := connect(connStr)
 
-	stmt, err := db.Prepare(`INSERT INTO build_permit (id, permit_, application_start_date, issue_date, community_area, ward, latitude, longitude) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) ON CONFLICT (id) DO NOTHING`)
+	stmt, err := db.Prepare(`INSERT INTO build_permit (id, permit_, permit_type, application_start_date, issue_date, community_area, ward, latitude, longitude) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) ON CONFLICT (id) DO NOTHING`)
 	if err != nil {
 	log.Fatal(err)
 	}
@@ -116,6 +117,7 @@ func main() {
 			_, err = stmt.Exec(			
 				trip.ID,
 				trip.Permit,
+				trip.PermitType,
 				trip.ApplicationStartDate,
 				trip.IssueDate,
 				trip.CommunityArea,
