@@ -64,3 +64,5 @@ for i in range(len(df)):
     
 df['zip'] = zip_list
 
+df.to_csv('./src/python/df.csv', encoding='utf-8', index=False)
+
