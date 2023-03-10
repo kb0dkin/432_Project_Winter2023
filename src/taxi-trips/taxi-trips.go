@@ -23,6 +23,7 @@ import (
 type Trip []struct {
 	TripID                  string `json:"trip_id"`
 	TaxiID                  string `json:"taxi_id"`
+	TripStartTimestamp	string `json:"trip_start_timestamp"`
 	TripSeconds             string `json:"trip_seconds"`
 	TripMiles               string `json:"trip_miles"`
 	PickupCentroidLatitude  string `json:"pickup_centroid_latitude"`
@@ -106,7 +107,7 @@ func main() {
 
 	db := connect(connStr) // connect to the database
 
-	stmt, err := db.Prepare(`INSERT INTO taxi_trips ( trip_id, taxi_id, trip_seconds, trip_miles, pickup_centroid_latitude, pickup_centroid_longitude, dropoff_centroid_latitude, dropoff_centroid_longitude, pickup_community_area, dropoff_community_area ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) ON CONFLICT (trip_id) DO NOTHING`)
+	stmt, err := db.Prepare(`INSERT INTO taxi_trips ( trip_id, taxi_id, trip_start_time_stamp, trip_seconds, trip_miles, pickup_centroid_latitude, pickup_centroid_longitude, dropoff_centroid_latitude, dropoff_centroid_longitude, pickup_community_area, dropoff_community_area ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) ON CONFLICT (trip_id) DO NOTHING`)
 	if err != nil {
 	log.Fatal(err)
 	}
@@ -121,6 +122,7 @@ func main() {
 			_, err = stmt.Exec(			
 				trip.TripID,
 				trip.TaxiID,
+				trip.TripStartTimestamp,
 				trip.TripSeconds,
 				trip.TripMiles,
 				trip.PickupCentroidLatitude,

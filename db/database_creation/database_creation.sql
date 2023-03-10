@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS covid_19_zip(
 CREATE TABLE IF NOT EXISTS taxi_trips(
     trip_id                     varchar(50) PRIMARY KEY, -- trip id hash 
     taxi_id                     varchar(128), -- taxi id hash
+    trip_start_timestamp        date, -- start of trip
     trip_seconds                int, -- trip length in seconds
     trip_miles                  float, -- not very useful, since this is really based off census tracts...
     pickup_centroid_latitude    float, -- latitude of pickup location
