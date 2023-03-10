@@ -116,7 +116,7 @@ func main() {
 			_, err = stmt.Exec(
 				trip.TripID,
 				trip.TripSeconds,
-				trip.TripStartTimestamp
+				trip.TripStartTimestamp,
 				trip.TripMiles,
 				trip.PickupCommunityArea,
 				trip.DropoffCommunityArea,
