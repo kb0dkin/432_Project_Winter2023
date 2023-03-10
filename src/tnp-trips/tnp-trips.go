@@ -23,6 +23,7 @@ import (
 type Trip []struct {
 	TripID                  string `json:"trip_id"`
 	TripSeconds             string `json:"trip_seconds"`
+	TripStartTimestamp	  string `json:"trip_start_timestamp"`
 	TripMiles               string `json:"trip_miles"`
 	PickupCommunityArea     string `json:"pickup_community_area"`
 	DropoffCommunityArea    string `json:"dropoff_community_area"`
@@ -100,7 +101,7 @@ func main() {
 
 	db := connect(connStr) // connect to the database
 
-	stmt, err := db.Prepare(`INSERT INTO TNP_trips (trip_id, trip_seconds, trip_miles, pickup_community_area, dropoff_community_area, pickup_centroid_latitude, pickup_centroid_longitude, dropoff_centroid_latitude, dropoff_centroid_longitude) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`)
+	stmt, err := db.Prepare(`INSERT INTO tnp_trips (trip_id, trip_seconds, trip_start_timestamp, trip_miles, pickup_community_area, dropoff_community_area, pickup_centroid_latitude, pickup_centroid_longitude, dropoff_centroid_latitude, dropoff_centroid_longitude) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`)
 	if err != nil {
 	log.Fatal(err)
 	}
@@ -115,6 +116,7 @@ func main() {
 			_, err = stmt.Exec(
 				trip.TripID,
 				trip.TripSeconds,
+				trip.TripStartTimestamp
 				trip.TripMiles,
 				trip.PickupCommunityArea,
 				trip.DropoffCommunityArea,
