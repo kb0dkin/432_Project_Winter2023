@@ -110,7 +110,7 @@ func main() {
 
 	db := connect(connStr) // connect to the database
 
-	stmt, err := db.Prepare(`INSERT INTO taxi_trips (trip_id, taxi_id, trip_start_timestamp, trip_seconds, trip_miles, pickup_centroid_latitude, pickup_centroid_longitude, dropoff_centroid_latitude, dropoff_centroid_longitude, pickup_community_area, dropoff_community_area ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) ON CONFLICT (trip_id) DO NOTHING`)
+	stmt, err := db.Prepare(`INSERT INTO taxi_trips (trip_id, taxi_id, trip_seconds, trip_miles, pickup_centroid_latitude, pickup_centroid_longitude, dropoff_centroid_latitude, dropoff_centroid_longitude, pickup_community_area, dropoff_community_area, trip_start_timestamp) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) ON CONFLICT (trip_id) DO NOTHING`)
 	if err != nil {
 	log.Fatal(err)
 	}
@@ -124,8 +124,7 @@ func main() {
 		if trip.TripID != "" && trip.TripSeconds != "" && trip.TripMiles != "" && trip.PickupCommunityArea != "" && trip.DropoffCommunityArea != "" && trip.TaxiID != "" {
 			_, err = stmt.Exec(			
 				trip.TripID,
-				trip.TaxiID,
-				trip.TripStartTimestamp,
+				trip.TaxiID,				
 				trip.TripSeconds,
 				trip.TripMiles,
 				trip.PickupCentroidLatitude,
@@ -134,6 +133,7 @@ func main() {
 				trip.DropoffCentroidLongitude,
 				trip.PickupCommunityArea,
 				trip.DropoffCommunityArea,
+				trip.TripStartTimestamp,
 				
 			)
 			if err != nil {
