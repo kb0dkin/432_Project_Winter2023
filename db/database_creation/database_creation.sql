@@ -96,10 +96,8 @@ CREATE TABLE IF NOT EXISTS taxi_covid(
     ind                         SERIAL PRIMARY KEY, -- primary key
     ride_type                   ride_types, -- taxi or rideshare?
     ride_date                   date, -- date of the rides
-    zip_start                   int,  -- pick up zip code
-    zip_end                     int,  -- destination zip code
+    zip                     int,  -- destination zip code
     covid_rate                  float, -- weekly covid rate (that's all we've got...)
-    num_rides                   int -- number of rides to that zip
 );
 
 -- requirement 2 -- taxis from airports to zip codes vs covid rates
@@ -111,7 +109,6 @@ CREATE TABLE IF NOT EXISTS midway_taxi_covid(
     ride_date               date, -- date of the rides
     zip                     int,  -- destination zip code
     covid_rate              float, -- weekly covid rate (that's all we've got...)
-    num_rides               int -- number of rides to that zip
 );
 -- for o'hare
 CREATE TABLE IF NOT EXISTS ohare_taxi_covid(
@@ -120,7 +117,6 @@ CREATE TABLE IF NOT EXISTS ohare_taxi_covid(
     ride_date               date, -- date of the rides
     zip                     int,  -- destination zip code
     covid_rate              float, -- weekly covid rate (that's all we've got...)
-    num_rides               int -- number of rides to that zip
 );
 
 -- requirement 3 -- taxi trip #s vs covid vulnerability index

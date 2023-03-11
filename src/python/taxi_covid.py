@@ -9,8 +9,6 @@ from shapely.geometry import Point, Polygon
 import time
 import psycopg2
 import pandas as pd
-import geojson
-import json
 import geopandas as gpd
 
 user = 'postgres'
@@ -26,7 +24,7 @@ conn = psycopg2.connect(f'host={ip} dbname={db_name} user={user} password={passw
 
 # select latitude and longitude from the table and run
 sql = "SELECT * FROM taxi_trips;"
-df = pd.read_sql(sql, conn)
+df_taxi = pd.read_sql(sql, conn)
 print(df.head())
 
 # load zips.geojson file with geopandas
