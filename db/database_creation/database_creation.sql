@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS taxi_trips(
 
 
 -- TNP_trips    :    list of rideshare trips, with start and end points
-CREATE TABLE IF NOT EXISTS TNP_trips(
+CREATE TABLE IF NOT EXISTS tnp_trips(
     trip_id                     VARCHAR(50) PRIMARY KEY, -- trip id hash 
     trip_seconds                int,
     trip_start_timestamp        date,    -- trip length in seconds
