@@ -42,7 +42,7 @@ func CSVSample(data_set string) Trip {
 	url_format := fmt.Sprintf("https://data.cityofchicago.org/resource/%s", data_set)
 	sodareq := soda.NewGetRequest(url_format, APP_TOKEN)
 	sodareq.Format = "json"	
-	sodareq.Query.Limit = 1000
+	sodareq.Query.Limit = 10000
 
 
 
@@ -90,7 +90,10 @@ func main() {
 	//Get everything after 01/01/2022
 	
 	// Get a sample of taxi trips from the Socrata API from today
-	trips := CSVSample("m6dm-c72p")
+	//trips := CSVSample("m6dm-c72p")
+
+	//Get 100,000 results from the API by running the query 100 times
+	trips := CSVSample("wrvz-psew")
 
 	host := os.Getenv("PGHOST")
     port := os.Getenv("PGPORT")
