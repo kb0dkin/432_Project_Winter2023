@@ -28,12 +28,12 @@ type Trip []struct {
 	CCVICategory       string `json:"ccvi_category"`
 }
 
-func CSVSample(data_set string, query string) Trip {
+func CSVSample(data_set string) Trip {
 	APP_TOKEN := "8nxBA5pgg7aPQ4fDbf4wj8BfM"
 	url_format := fmt.Sprintf("https://data.cityofchicago.org/resource/%s", data_set)
 	sodareq := soda.NewGetRequest(url_format, APP_TOKEN)
 	sodareq.Format = "json"
-	sodareq.Query.Where = query
+	
 	sodareq.Query.Limit = 1000
 
 	// Gets the response
@@ -81,10 +81,10 @@ func main() {
 	//https://data.cityofchicago.org/api/id/wrvz-psew.json?$query=select *, :id order by `trip_start_timestamp` asc limit 100
 	//Get everything after 2023-01-01
 
-	where_statement := "trip_start_timestamp > '2022-01-01T00:00:00.000'"
+	
 
 	// Get a sample of taxi trips from the Socrata API from today
-	trips := CSVSample("xhc6-88s9", where_statement)
+	trips := CSVSample("xhc6-88s9")
 
 	host := os.Getenv("PGHOST")
 	port := os.Getenv("PGPORT")
