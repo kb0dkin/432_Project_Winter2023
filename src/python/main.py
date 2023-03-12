@@ -432,21 +432,79 @@ def tnp_trips():
                 print(e)
                 continue
 
-def ccvi_taxi():
-        
+def ccvi_index():
+       
     
     DATASET = 'xhc6-88s9'
     
     #This data set is only two pages long, so we don't need to loop through pages
     
     conn = psycopg2.connect(f'host={IP} dbname={DB_NAME} user={USER} password={PASSWORD} port={PORT}')
-    endpoint = f'https://data.cityofchicago.org/resource/{DATASET}.json?$order=:id%20DESC&$limit=1000'
+    endpoint = f'https://data.cityofchicago.org/resource/{DATASET}.json'
     
     response = requests.get(endpoint).json()
     
     df = pd.DataFrame(response)
     
-    SQL_TABLE = 'ccvi_taxi'
+    SQL_TABLE = 'ccvi_index'
+    print(len(df))
+    #data types
+    
+    # geography_type = str(df['geography_type'])
+    # community_area_or_zip = int(df['community_area_or_zip'])
+    # ccvi_score = float(df['ccvi_score'])
+    # ccvi_category = str(df['ccvi_category'])
+    # latitude = float(df['location']['coordinates'][1])
+    # longitude = float(df['location']['coordinates'][0])
+    # community_area_name = str(df['community_area_name'])
+    # create table if there is not one already
+    
+    #Delete table if it already exists
+    cur = conn.cursor()
+    cur.execute(f'DROP TABLE IF EXISTS {SQL_TABLE}')
+    conn.commit()
+    
+    create_table = f'''
+    CREATE TABLE IF NOT EXISTS {SQL_TABLE}(geography_type VARCHAR(50), community_area_or_zip int, ccvi_score float, ccvi_category VARCHAR(50), latitude float, longitude float, community_area_name VARCHAR(50));
+    '''
+    
+    cur = conn.cursor()
+    cur.execute(create_table)
+    conn.commit()
+    
+    for index, row in df.iterrows():
+        
+                
+        try:
+            print(f'Inserting row {index} into {SQL_TABLE}')
+            
+            geography_type = row['geography_type']
+            community_area_or_zip = row['community_area_or_zip']
+            ccvi_score = row['ccvi_score']
+            ccvi_category = row['ccvi_category']
+            latitude = row['location']['coordinates'][1]
+            longitude = row['location']['coordinates'][0]
+            community_area_name = row['community_area_name']
+            
+            #correct data types
+            geography_type = str(geography_type)
+            community_area_or_zip = int(community_area_or_zip)
+            ccvi_score = float(ccvi_score)
+            ccvi_category = str(ccvi_category)
+            latitude = float(latitude)
+            longitude = float(longitude)
+            community_area_name = str(community_area_name)
+            if community_area_name == 'nan':
+                community_area_name = ''
+            
+            #insert data into table
+            cur.execute(f"INSERT INTO {SQL_TABLE} (geography_type, community_area_or_zip, ccvi_score, ccvi_category, latitude, longitude, community_area_name) VALUES ('{geography_type}', {community_area_or_zip}, {ccvi_score}, '{ccvi_category}', {latitude}, {longitude}, '{community_area_name}') ON CONFLICT DO NOTHING;")
+            
+            conn.commit()
+        except Exception as e:
+            print(e)
+            continue
+    
     
     cur = conn.cursor()
     
@@ -472,8 +530,9 @@ def main():
     # covid_19_daily_cases()
     # covid_19_zip()
     # health_ind()
-    taxi_trips()
-    tnp_trips()
+    # taxi_trips()
+    # tnp_trips()
+    ccvi_index()
 
 
 if __name__ == "__main__":
